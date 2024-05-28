@@ -1,7 +1,9 @@
 import "./App.css";
+import Description from "./pages/Description/Description";
 
 function App() {
-  return <h1 className="text-3xl font-bold underline">Hello world!</h1>;
+  const markdownText = ` asasddddddddddddddddddddddddddddddddddddddddddddddddasssssssssssssssssssssss`;
+  return <Description descriptionText={markdownText} />;
 }
 
 export default App;
