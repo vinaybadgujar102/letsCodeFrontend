@@ -1,9 +1,10 @@
 /* eslint-disable simple-import-sort/imports  */
+import { DragEvent } from "react";
 import { useState } from "react";
 import AceEditor from "react-ace";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
-
+import DOMPurify from "dompurify";
 import "ace-builds/src-noconflict/theme-monokai";
 import "ace-builds/src-noconflict/theme-github_dark";
 import "ace-builds/src-noconflict/theme-github";
@@ -37,7 +38,7 @@ type themeStyle = {
 };
 
 function Description({ descriptionText }: { descriptionText: string }) {
-  const sanitizedMarkdown = descriptionText;
+  const sanitizedMarkdown = DOMPurify.sanitize(descriptionText);
 
   const [activeTab, setActiveTab] = useState("statement");
   const [leftWidth, setLeftWidth] = useState(50);
@@ -45,7 +46,7 @@ function Description({ descriptionText }: { descriptionText: string }) {
   const [language, setLanguage] = useState("javascript");
   const [theme, setTheme] = useState("monokai");
 
-  const startDragging = (e: MouseEvent) => {
+  const startDragging = (e: DragEvent<HTMLDivElement>) => {
     setIsDragging(true);
     e.preventDefault();
   };
@@ -56,7 +57,7 @@ function Description({ descriptionText }: { descriptionText: string }) {
     }
   };
 
-  const onDrag = (e: MouseEvent) => {
+  const onDrag = (e: DragEvent<HTMLDivElement>) => {
     if (!isDragging) return;
 
     const newLeftWidth = (e.clientX / window.innerWidth) * 100;
