@@ -41,6 +41,7 @@ function Description({ descriptionText }: { descriptionText: string }) {
   const sanitizedMarkdown = DOMPurify.sanitize(descriptionText);
 
   const [activeTab, setActiveTab] = useState("statement");
+  const [testCaseTab, setTestCaseTab] = useState("input");
   const [leftWidth, setLeftWidth] = useState(50);
   const [isDragging, setIsDragging] = useState(false);
   const [language, setLanguage] = useState("javascript");
@@ -68,6 +69,13 @@ function Description({ descriptionText }: { descriptionText: string }) {
 
   const isActiveTab = (tabName: string) => {
     if (activeTab === tabName) {
+      return "tab tab-active";
+    }
+    return "tab";
+  };
+
+  const isInputTabActive = (tabName: string) => {
+    if (testCaseTab === tabName) {
       return "tab tab-active";
     }
     return "tab";
@@ -163,7 +171,7 @@ function Description({ descriptionText }: { descriptionText: string }) {
             theme={theme}
             name="codeEditor"
             className="editor"
-            style={{ width: "100%" }}
+            style={{ width: "100%", minHeight: "550px" }}
             setOptions={{
               enableBasicAutocompletion: true,
               enableLiveAutocompletion: true,
@@ -171,6 +179,41 @@ function Description({ descriptionText }: { descriptionText: string }) {
               fontSize: 16,
             }}
           />
+        </div>
+        <div className="collapse bg-base-300 rounded-none">
+          <input type="checkbox" className="peer" />
+          <div className="collapse-title bg-primary text-primary-content peer-checked:bg-secondary peer-checked:text-secondary-content">
+            Console
+          </div>
+          <div className="collapse-content bg-primary text-primary-content peer-checked:bg-secondary peer-checked:text-secondary-content">
+            <div role="tablist" className="tabs tabs-boxed w-3/5 mb-4">
+              <a
+                onClick={() => setTestCaseTab("input")}
+                role="tab"
+                className={isInputTabActive("input")}
+              >
+                Input
+              </a>
+              <a
+                onClick={() => setTestCaseTab("output")}
+                role="tab"
+                className={isInputTabActive("output")}
+              >
+                Output
+              </a>
+            </div>
+            {testCaseTab === "input" ? (
+              <textarea
+                rows={4}
+                cols={50}
+                className="bg-neutral text-neutral-content resize-none rounded-sm"
+                name=""
+                id=""
+              ></textarea>
+            ) : (
+              <div className="w-12 h-8"></div>
+            )}
+          </div>
         </div>
       </div>
     </div>
