@@ -18,18 +18,18 @@ function Description({ descriptionText }) {
   const [leftWidth, setLeftWidth] = useState(50);
   const [isDragging, setIsDragging] = useState(false);
 
-  const startDragging = (e) => {
+  const startDragging = (e: MouseEvent) => {
     setIsDragging(true);
     e.preventDefault();
   };
 
-  const stopDragging = (e) => {
+  const stopDragging = () => {
     if (isDragging) {
       setIsDragging(false);
     }
   };
 
-  const onDrag = (e) => {
+  const onDrag = (e: MouseEvent) => {
     if (!isDragging) return;
 
     const newLeftWidth = (e.clientX / window.innerWidth) * 100;
@@ -40,7 +40,7 @@ function Description({ descriptionText }) {
 
   return (
     <div
-      className="container flex w-full h-[100vh]"
+      className="flex w-screen h-screen"
       onMouseMove={onDrag}
       onMouseUp={stopDragging}
     >
