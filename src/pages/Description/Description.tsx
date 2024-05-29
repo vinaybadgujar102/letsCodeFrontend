@@ -15,12 +15,20 @@ import "ace-builds/src-noconflict/mode-java";
 import "ace-builds/src-noconflict/mode-python";
 import "ace-builds/src-noconflict/ext-language_tools";
 
+import Languages from "../../constant/Languages";
+
+type languageSupport = {
+  languageName: string;
+  value: string;
+};
+
 function Description({ descriptionText }: { descriptionText: string }) {
   const sanitizedMarkdown = descriptionText;
 
   const [activeTab, setActiveTab] = useState("statement");
   const [leftWidth, setLeftWidth] = useState(50);
   const [isDragging, setIsDragging] = useState(false);
+  const [language, setLanguage] = useState("javascript");
 
   const startDragging = (e: MouseEvent) => {
     setIsDragging(true);
@@ -107,14 +115,16 @@ function Description({ descriptionText }: { descriptionText: string }) {
             <button className="btn btn-warning btn-sm">Run Code</button>
           </div>
           <div>
-            <select className="select select-sm select-info w-full max-w-xs">
-              <option disabled selected>
-                Language
-              </option>
-              <option>CPP</option>
-              <option>Java</option>
-              <option value="">JS</option>
-              <option value="">Python</option>
+            <select
+              className="select select-sm select-info w-full max-w-xs"
+              value={language}
+              onChange={(e) => setLanguage(e.target.value)}
+            >
+              {Languages.map((language: languageSupport) => (
+                <option key={language.value} value={language.value}>
+                  {language.languageName}
+                </option>
+              ))}
             </select>
           </div>
           <div>
@@ -130,7 +140,7 @@ function Description({ descriptionText }: { descriptionText: string }) {
         </div>
         <div className="editorContainer">
           <AceEditor
-            mode="javascript"
+            mode={language}
             theme="monokai"
             name="codeEditor"
             className="editor"
