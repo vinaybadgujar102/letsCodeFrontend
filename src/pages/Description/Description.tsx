@@ -11,7 +11,7 @@ import "ace-builds/src-noconflict/mode-java";
 import "ace-builds/src-noconflict/mode-python";
 import "ace-builds/src-noconflict/ext-language_tools";
 
-function Description({ descriptionText }) {
+function Description({ descriptionText }: { descriptionText: string }) {
   const sanitizedMarkdown = descriptionText;
 
   const [activeTab, setActiveTab] = useState("statement");
@@ -38,6 +38,13 @@ function Description({ descriptionText }) {
     }
   };
 
+  const isActiveTab = (tabName: string) => {
+    if (activeTab === tabName) {
+      return "tab tab-active";
+    }
+    return "tab";
+  };
+
   return (
     <div
       className="flex w-screen h-screen"
@@ -48,14 +55,28 @@ function Description({ descriptionText }) {
         className="leftPanel h-full overflow-auto"
         style={{ width: `${leftWidth}%` }}
       >
-        <div className="tabs">
-          <button onClick={() => setActiveTab("statement")}>
+        <div role="tablist" className="tabs tabs-boxed w-3/5">
+          <a
+            role="tab "
+            className={isActiveTab("statement")}
+            onClick={() => setActiveTab("statement")}
+          >
             Problem Statement
-          </button>
-          <button onClick={() => setActiveTab("editorial")}>Editorial</button>
-          <button onClick={() => setActiveTab("submissions")}>
+          </a>
+          <a
+            role="tab"
+            className={isActiveTab("editorial")}
+            onClick={() => setActiveTab("editorial")}
+          >
+            Editorial
+          </a>
+          <a
+            role="tab"
+            className={isActiveTab("submissions")}
+            onClick={() => setActiveTab("submissions")}
+          >
             Submission
-          </button>
+          </a>
         </div>
 
         <div className="markdownViewer p-[20px] basis-1/2">
