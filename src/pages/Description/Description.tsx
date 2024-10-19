@@ -1,5 +1,5 @@
 /* eslint-disable simple-import-sort/imports  */
-import { DragEvent } from "react";
+import { DragEvent, useEffect } from "react";
 import { useState } from "react";
 import AceEditor from "react-ace";
 import ReactMarkdown from "react-markdown";
@@ -26,6 +26,7 @@ import "ace-builds/src-noconflict/ext-language_tools";
 
 import Languages from "../../constant/Languages";
 import Themes from "../../constant/Themes";
+import axios from "axios";
 
 type languageSupport = {
   languageName: string;
@@ -46,6 +47,27 @@ function Description({ descriptionText }: { descriptionText: string }) {
   const [isDragging, setIsDragging] = useState(false);
   const [language, setLanguage] = useState("javascript");
   const [theme, setTheme] = useState("monokai");
+  const [code, setCode] = useState("");
+
+  async function handleSubmission() {
+    try {
+      console.log(code);
+      console.log(language);
+      const response = await axios.post(
+        "http://localhost:3000/api/v1/submissions",
+        {
+          code,
+          language,
+          userId: "1",
+          problemId: "1",
+        }
+      );
+      console.log(response);
+      return response;
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   const startDragging = (e: DragEvent<HTMLDivElement>) => {
     setIsDragging(true);
@@ -133,7 +155,12 @@ function Description({ descriptionText }: { descriptionText: string }) {
       >
         <div className="flex gap-x-2 justify-start items-center px-4 py-2">
           <div>
-            <button className="btn btn-success btn-sm">Submit</button>
+            <button
+              className="btn btn-success btn-sm"
+              onClick={handleSubmission}
+            >
+              Submit
+            </button>
           </div>
           <div>
             <button className="btn btn-warning btn-sm">Run Code</button>
@@ -169,6 +196,8 @@ function Description({ descriptionText }: { descriptionText: string }) {
           <AceEditor
             mode={language}
             theme={theme}
+            value={code}
+            onChange={setCode}
             name="codeEditor"
             className="editor"
             style={{ width: "100%", minHeight: "550px" }}
