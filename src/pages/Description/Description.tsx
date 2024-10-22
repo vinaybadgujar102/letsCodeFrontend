@@ -58,8 +58,8 @@ function Description({ descriptionText }: { descriptionText: string }) {
         {
           code,
           language,
-          userId: "1",
-          problemId: "1",
+          userID: "1",
+          problemID: "671667d4cff1fd44f2b4e512",
         }
       );
       console.log(response);
@@ -138,7 +138,10 @@ function Description({ descriptionText }: { descriptionText: string }) {
         </div>
 
         <div className="markdownViewer p-[20px] basis-1/2">
-          <ReactMarkdown rehypePlugins={[rehypeRaw]}>
+          <ReactMarkdown
+            rehypePlugins={[rehypeRaw]}
+            className="prose prose-slate max-w-none prose-headings:text-white prose-strong:text-white"
+          >
             {sanitizedMarkdown}
           </ReactMarkdown>
         </div>
