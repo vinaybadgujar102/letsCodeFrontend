@@ -49,7 +49,9 @@ function App() {
       socket.off("disconnect", handleDisconnect);
       socket.off("submissionPayloadResponse", handleFooEvent);
     };
-  }, [userId]);
+  }, []);
+
+  console.log(problem);
 
   if (!problem) return null;
 
@@ -57,7 +59,10 @@ function App() {
     <>
       <ConnectionManager isConnected={isConnected} />
       <Navbar />
-      <Description descriptionText={problem.description} />
+      <Description
+        descriptionText={problem.description}
+        testCases={problem.testCases}
+      />
       <Sidebar />
     </>
   );

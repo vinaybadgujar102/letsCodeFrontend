@@ -20,6 +20,9 @@ const ProblemList: React.FC = () => {
     }
   };
 
+  console.log(getDifficultyColor("easy"));
+  console.log(problems[0]);
+
   return (
     <div className="flex flex-col w-screen h-screen">
       <Navbar />
@@ -42,10 +45,10 @@ const ProblemList: React.FC = () => {
                   </h2>
                   <p
                     className={`text-sm font-medium ${getDifficultyColor(
-                      problem.difficulty
+                      problem.diffiulty
                     )}`}
                   >
-                    {problem.difficulty}
+                    {problem.diffiulty}
                   </p>
                 </div>
                 <div className="bg-gray-50 px-6 py-4">

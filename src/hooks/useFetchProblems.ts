@@ -5,7 +5,7 @@ import axios from "../config/axios.config";
 interface Problem {
   _id: string;
   title: string;
-  difficulty: string;
+  diffiulty: string;
 }
 
 const useFetchProblems = () => {
