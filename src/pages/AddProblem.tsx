@@ -75,7 +75,7 @@ export default function AddProblem() {
             <div className="mt-2 p-4 bg-white border border-gray-300 rounded-md shadow-sm">
               <Markdown
                 rehypePlugins={[rehypeRaw]}
-                className="prose prose-slate max-w-none prose-headings:text-gray-800 prose-strong:text-gray-800"
+                className="prose prose-gray max-w-none prose-headings:text-gray-800 prose-strong:text-gray-800"
               >
                 {markdown}
               </Markdown>

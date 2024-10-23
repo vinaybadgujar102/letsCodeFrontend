@@ -1,29 +1,30 @@
 import "./App.css";
 
 import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
+import { getProblem } from "./apis/problem.api";
 import { ConnectionManager } from "./components/ConnectionManager";
 import Navbar from "./components/Navbar";
 import Sidebar from "./components/Sidebar";
-import SampleProblem1 from "./constant/SampleProblem1";
 import Description from "./pages/Description/Description";
 import { socket } from "./socket";
-import { getProblem } from "./apis/problem.api";
 
 function App() {
   const [isConnected, setIsConnected] = useState(socket.connected);
   const userId = "1";
-
-  const [problem, setProblem] = useState(SampleProblem1);
+  const { id } = useParams();
+  const [problem, setProblem] = useState(null);
 
   useEffect(() => {
-    getProblem("671762b9398a9fbe9f244a0c").then((res) => {
-      setProblem(res.data);
-    });
-  }, []);
+    if (id) {
+      getProblem(id).then((res) => {
+        setProblem(res.data.data);
+      });
+    }
+  }, [id]);
 
   const [fooEvents, setFooEvents] = useState([]);
-  console.log(fooEvents);
 
   useEffect(() => {
     function onConnect() {
@@ -57,7 +58,7 @@ function App() {
     <>
       <ConnectionManager isConnected={isConnected} />
       <Navbar />
-      <Description descriptionText={problem?.data.description} />
+      <Description descriptionText={problem.description} />
       <Sidebar />
     </>
   );

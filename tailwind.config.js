@@ -4,6 +4,7 @@ export default {
   theme: {
     extend: {},
   },
+  important: "html",
   plugins: [require("daisyui"), require("@tailwindcss/typography")],
   daisyui: {
     themes: ["forest"],

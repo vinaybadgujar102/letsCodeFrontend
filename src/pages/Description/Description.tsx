@@ -27,6 +27,7 @@ import "ace-builds/src-noconflict/ext-language_tools";
 import Languages from "../../constant/Languages";
 import Themes from "../../constant/Themes";
 import axios from "axios";
+import Markdown from "react-markdown";
 
 type languageSupport = {
   languageName: string;
@@ -40,6 +41,7 @@ type themeStyle = {
 
 function Description({ descriptionText }: { descriptionText: string }) {
   const sanitizedMarkdown = DOMPurify.sanitize(descriptionText);
+  console.log(descriptionText);
 
   const [activeTab, setActiveTab] = useState("statement");
   const [testCaseTab, setTestCaseTab] = useState("input");
@@ -138,12 +140,12 @@ function Description({ descriptionText }: { descriptionText: string }) {
         </div>
 
         <div className="markdownViewer p-[20px] basis-1/2">
-          <ReactMarkdown
+          <Markdown
             rehypePlugins={[rehypeRaw]}
-            className="prose prose-slate max-w-none prose-headings:text-white prose-strong:text-white"
+            className="prose prose-stone max-w-none prose-headings:text-white prose-strong:text-white text-white !important"
           >
             {sanitizedMarkdown}
-          </ReactMarkdown>
+          </Markdown>
         </div>
       </div>
 
