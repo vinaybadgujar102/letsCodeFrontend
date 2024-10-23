@@ -37,16 +37,6 @@ import ProblemStatement from "../../components/ProblemStatement";
 import CodeEditor from "../../components/CodeEditor";
 import Console from "../../components/Console";
 
-type languageSupport = {
-  languageName: string;
-  value: string;
-};
-
-type themeStyle = {
-  themeName: string;
-  value: string;
-};
-
 interface TestCase {
   input: string;
   output: string;
@@ -96,7 +86,7 @@ function Description({ descriptionText, testCases }: DescriptionProps) {
       console.log(code);
       console.log(language);
       const response = await axios.post(
-        "http://localhost:3000/api/v1/submissions",
+        "http://13.200.216.194:3000/api/v1/submissions",
         {
           code,
           language,
