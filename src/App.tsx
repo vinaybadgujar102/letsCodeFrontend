@@ -15,6 +15,7 @@ function App() {
   const userId = "1";
   const { id } = useParams();
   const [problem, setProblem] = useState(null);
+  const [fooEvents, setFooEvents] = useState([]);
 
   useEffect(() => {
     if (id) {
@@ -24,33 +25,31 @@ function App() {
     }
   }, [id]);
 
-  const [fooEvents, setFooEvents] = useState([]);
-
   useEffect(() => {
-    function onConnect() {
+    const handleConnect = () => {
       setIsConnected(true);
       socket.emit("setUserId", userId);
       console.log("Connected");
-    }
+    };
 
-    function onDisconnect() {
+    const handleDisconnect = () => {
       setIsConnected(false);
-    }
+    };
 
-    function onFooEvent(value) {
+    const handleFooEvent = (value) => {
       setFooEvents((previous) => [...previous, value]);
-    }
+    };
 
-    socket.on("connect", onConnect);
-    socket.on("disconnect", onDisconnect);
-    socket.on("submissionPayloadResponse", onFooEvent);
+    socket.on("connect", handleConnect);
+    socket.on("disconnect", handleDisconnect);
+    socket.on("submissionPayloadResponse", handleFooEvent);
 
     return () => {
-      socket.off("connect", onConnect);
-      socket.off("disconnect", onDisconnect);
-      socket.off("submissionPayloadResponse", onFooEvent);
+      socket.off("connect", handleConnect);
+      socket.off("disconnect", handleDisconnect);
+      socket.off("submissionPayloadResponse", handleFooEvent);
     };
-  }, []);
+  }, [userId]);
 
   if (!problem) return null;
 
