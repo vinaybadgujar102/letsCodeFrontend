@@ -1,9 +1,6 @@
 /* eslint-disable simple-import-sort/imports  */
 import { DragEvent, useEffect } from "react";
 import { useState } from "react";
-import AceEditor from "react-ace";
-import ReactMarkdown from "react-markdown";
-import rehypeRaw from "rehype-raw";
 import DOMPurify from "dompurify";
 
 // First import ace core
@@ -50,7 +47,7 @@ interface DescriptionProps {
 function Description({ descriptionText, testCases }: DescriptionProps) {
   const sanitizedMarkdown = DOMPurify.sanitize(descriptionText);
   const [activeTab, setActiveTab] = useState("statement");
-  const [testCaseTab, setTestCaseTab] = useState("input");
+  const [testCaseTab, setTestCaseTab] = useState("testCase");
   const [leftWidth, setLeftWidth] = useState(50);
   const [isDragging, setIsDragging] = useState(false);
   const [language, setLanguage] = useState("javascript");
@@ -60,14 +57,13 @@ function Description({ descriptionText, testCases }: DescriptionProps) {
     output: string;
     status: string;
   } | null>(null);
-  const [currentTestCase, setCurrentTestCase] = useState<TestCase>(
-    testCases[0]
-  );
 
   useEffect(() => {
     const handleSubmissionResponse = (data: {
-      output: string;
-      status: string;
+      response: {
+        output: string;
+        status: string;
+      };
     }) => {
       setResponseData(data.response);
     };
@@ -158,7 +154,7 @@ function Description({ descriptionText, testCases }: DescriptionProps) {
         <Console
           testCaseTab={testCaseTab}
           setTestCaseTab={setTestCaseTab}
-          currentTestCase={currentTestCase}
+          currentTestCase={testCases[0]}
           responseData={responseData}
         />
       </div>

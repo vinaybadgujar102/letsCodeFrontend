@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import "./App.css";
 
 import { useEffect, useState } from "react";
@@ -14,8 +15,11 @@ function App() {
   const [isConnected, setIsConnected] = useState(socket.connected);
   const userId = "1";
   const { id } = useParams();
-  const [problem, setProblem] = useState(null);
-  const [fooEvents, setFooEvents] = useState([]);
+  const [problem, setProblem] = useState<any>(null);
+  const [fooEvents, setFooEvents] = useState<any>([]);
+
+  console.log(fooEvents);
+  console.log(isConnected);
 
   useEffect(() => {
     if (id) {
@@ -36,8 +40,8 @@ function App() {
       setIsConnected(false);
     };
 
-    const handleFooEvent = (value) => {
-      setFooEvents((previous) => [...previous, value]);
+    const handleFooEvent = (value: any) => {
+      setFooEvents((previous: any) => [...previous, value]);
     };
 
     socket.on("connect", handleConnect);
@@ -57,7 +61,7 @@ function App() {
 
   return (
     <>
-      <ConnectionManager isConnected={isConnected} />
+      <ConnectionManager />
       <Navbar />
       <Description
         descriptionText={problem.description}

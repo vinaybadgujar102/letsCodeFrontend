@@ -45,10 +45,10 @@ const ProblemList: React.FC = () => {
                   </h2>
                   <p
                     className={`text-sm font-medium ${getDifficultyColor(
-                      problem.diffiulty
+                      problem.difficulty
                     )}`}
                   >
-                    {problem.diffiulty}
+                    {problem.difficulty}
                   </p>
                 </div>
                 <div className="bg-gray-50 px-6 py-4">

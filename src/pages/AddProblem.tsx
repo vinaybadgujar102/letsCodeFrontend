@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
 import Markdown from "react-markdown";
 import { toast } from "react-toastify";
@@ -15,7 +16,7 @@ interface TestCase {
 export default function AddProblem() {
   const [markdown, setMarkdown] = useState("");
   const [title, setTitle] = useState("");
-  const [codeStubs, setCodeStubs] = useState([]);
+  const [codeStubs, setCodeStubs] = useState<any>([]);
   const [testCases, setTestCases] = useState<TestCase[]>([]);
 
   async function onFormSubmit(e: React.FormEvent<HTMLFormElement>) {

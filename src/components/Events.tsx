@@ -1,6 +1,4 @@
-import React from "react";
-
-export function Events({ events }) {
+export function Events({ events }: { events: string[] }) {
   return (
     <ul>
       {events.map((event, index) => (
