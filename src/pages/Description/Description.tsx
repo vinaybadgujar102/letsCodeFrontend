@@ -33,6 +33,13 @@ import { socket } from "../../socket"; // Ensure you have the correct path to yo
 import ProblemStatement from "../../components/ProblemStatement";
 import CodeEditor from "../../components/CodeEditor";
 import Console from "../../components/Console";
+import { useAuth } from "../../context/AuthContext";
+import {
+  checkAndUpdateSubmissionCount,
+  SUBMISSION_LIMIT,
+} from "../../services/firebase";
+import { toast } from "react-toastify";
+import SubmissionLimit from "../../components/SubmissionLimit";
 
 interface TestCase {
   input: string;
@@ -57,6 +64,7 @@ function Description({ descriptionText, testCases }: DescriptionProps) {
     output: string;
     status: string;
   } | null>(null);
+  const { user } = useAuth();
 
   useEffect(() => {
     const handleSubmissionResponse = (data: {
@@ -79,6 +87,17 @@ function Description({ descriptionText, testCases }: DescriptionProps) {
 
   async function handleSubmission() {
     try {
+      if (!user) return;
+
+      const canSubmit = await checkAndUpdateSubmissionCount(user.uid);
+
+      if (!canSubmit) {
+        toast.error(
+          `You've reached your daily limit of ${SUBMISSION_LIMIT} submissions`
+        );
+        return;
+      }
+
       console.log(code);
       console.log(language);
       const response = await axios.post(
@@ -86,7 +105,7 @@ function Description({ descriptionText, testCases }: DescriptionProps) {
         {
           code,
           language,
-          userID: "1",
+          userID: user.uid,
           problemID: "671667d4cff1fd44f2b4e512",
         }
       );
@@ -94,6 +113,7 @@ function Description({ descriptionText, testCases }: DescriptionProps) {
       return response;
     } catch (error) {
       console.log(error);
+      toast.error("Something went wrong with your submission");
     }
   }
 
@@ -117,46 +137,49 @@ function Description({ descriptionText, testCases }: DescriptionProps) {
   };
 
   return (
-    <div
-      className="flex w-screen h-screen"
-      onMouseMove={onDrag}
-      onMouseUp={stopDragging}
-    >
+    <div>
+      <SubmissionLimit />
       <div
-        className="leftPanel h-full overflow-auto"
-        style={{ width: `${leftWidth}%` }}
+        className="flex w-screen h-screen"
+        onMouseMove={onDrag}
+        onMouseUp={stopDragging}
       >
-        <ProblemStatement
-          activeTab={activeTab}
-          setActiveTab={setActiveTab}
-          sanitizedMarkdown={sanitizedMarkdown}
-        />
-      </div>
+        <div
+          className="leftPanel h-full overflow-auto"
+          style={{ width: `${leftWidth}%` }}
+        >
+          <ProblemStatement
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+            sanitizedMarkdown={sanitizedMarkdown}
+          />
+        </div>
 
-      <div
-        className="divider cursor-col-resize w-[5px] bg-slate-200 h-full"
-        onMouseDown={startDragging}
-      ></div>
+        <div
+          className="divider cursor-col-resize w-[5px] bg-slate-200 h-full"
+          onMouseDown={startDragging}
+        ></div>
 
-      <div
-        className="rightPanel h-full overflow-auto flex flex-col"
-        style={{ width: `${100 - leftWidth}%` }}
-      >
-        <CodeEditor
-          language={language}
-          setLanguage={setLanguage}
-          theme={theme}
-          setTheme={setTheme}
-          code={code}
-          setCode={setCode}
-          handleSubmission={handleSubmission}
-        />
-        <Console
-          testCaseTab={testCaseTab}
-          setTestCaseTab={setTestCaseTab}
-          currentTestCase={testCases[0]}
-          responseData={responseData}
-        />
+        <div
+          className="rightPanel h-full overflow-auto flex flex-col"
+          style={{ width: `${100 - leftWidth}%` }}
+        >
+          <CodeEditor
+            language={language}
+            setLanguage={setLanguage}
+            theme={theme}
+            setTheme={setTheme}
+            code={code}
+            setCode={setCode}
+            handleSubmission={handleSubmission}
+          />
+          <Console
+            testCaseTab={testCaseTab}
+            setTestCaseTab={setTestCaseTab}
+            currentTestCase={testCases[0]}
+            responseData={responseData}
+          />
+        </div>
       </div>
     </div>
   );

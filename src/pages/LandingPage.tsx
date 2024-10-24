@@ -1,11 +1,8 @@
 import { Link } from "react-router-dom";
 
-import Navbar from "../components/Navbar";
-
 export default function LandingPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800">
-      <Navbar />
       <div className="container mx-auto px-4 py-16">
         <div className="text-center">
           <h1 className="text-5xl font-bold text-white mb-6">
@@ -17,8 +14,8 @@ export default function LandingPage() {
             challenges.
           </p>
           <div className="flex justify-center gap-6">
-            <Link to="/problems" className="btn btn-primary btn-lg">
-              Start Coding
+            <Link to="/login" className="btn btn-primary btn-lg">
+              Get Started
             </Link>
           </div>
         </div>

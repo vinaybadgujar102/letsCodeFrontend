@@ -3,6 +3,7 @@ import "./App.css";
 
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { useAuth } from "./context/AuthContext";
 
 import { getProblem } from "./apis/problem.api";
 import { ConnectionManager } from "./components/ConnectionManager";
@@ -13,7 +14,7 @@ import { socket } from "./socket";
 
 function App() {
   const [isConnected, setIsConnected] = useState(socket.connected);
-  const userId = "1";
+  const { user } = useAuth();
   const { id } = useParams();
   const [problem, setProblem] = useState<any>(null);
   const [fooEvents, setFooEvents] = useState<any>([]);
@@ -30,10 +31,12 @@ function App() {
   }, [id]);
 
   useEffect(() => {
+    if (!user) return; // Don't connect if no user
+
     const handleConnect = () => {
       setIsConnected(true);
-      socket.emit("setUserId", userId);
-      console.log("Connected");
+      socket.emit("setUserId", user.uid); // Use Firebase UID
+      console.log("Connected with user:", user.uid);
     };
 
     const handleDisconnect = () => {
@@ -53,7 +56,7 @@ function App() {
       socket.off("disconnect", handleDisconnect);
       socket.off("submissionPayloadResponse", handleFooEvent);
     };
-  }, []);
+  }, [user]); // Add user to dependency array
 
   console.log(problem);
 
