@@ -1,6 +1,8 @@
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
+
 import { auth } from "../../config/firebase";
+import { connectSocket } from "../../services/socket.service";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -8,7 +10,8 @@ export default function Login() {
   const handleGoogleLogin = async () => {
     const provider = new GoogleAuthProvider();
     try {
-      await signInWithPopup(auth, provider);
+      const result = await signInWithPopup(auth, provider);
+      connectSocket(result.user.uid);
       navigate("/problems");
     } catch (error) {
       console.error("Failed to log in with Google:", error);

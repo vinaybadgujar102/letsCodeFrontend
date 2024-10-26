@@ -51,13 +51,15 @@ interface DescriptionProps {
   testCases: TestCase[];
 }
 
+const SUBMISSION_SERVICE_URL = import.meta.env.VITE_SUBMISSION_SERVICE_URL;
+
 function Description({ descriptionText, testCases }: DescriptionProps) {
   const sanitizedMarkdown = DOMPurify.sanitize(descriptionText);
   const [activeTab, setActiveTab] = useState("statement");
   const [testCaseTab, setTestCaseTab] = useState("testCase");
   const [leftWidth, setLeftWidth] = useState(50);
   const [isDragging, setIsDragging] = useState(false);
-  const [language, setLanguage] = useState("javascript");
+  const [language, setLanguage] = useState("python");
   const [theme, setTheme] = useState("monokai");
   const [code, setCode] = useState("");
   const [responseData, setResponseData] = useState<{
@@ -90,8 +92,11 @@ function Description({ descriptionText, testCases }: DescriptionProps) {
       if (!user) return;
 
       const canSubmit = await checkAndUpdateSubmissionCount(user.uid);
+      console.log(canSubmit);
 
       if (!canSubmit) {
+        console.log("Submission limit reached");
+
         toast.error(
           `You've reached your daily limit of ${SUBMISSION_LIMIT} submissions`
         );
@@ -100,13 +105,14 @@ function Description({ descriptionText, testCases }: DescriptionProps) {
 
       console.log(code);
       console.log(language);
+      const problemID = window.location.href.split("/")[4];
       const response = await axios.post(
-        "http://13.200.216.194:3000/api/v1/submissions",
+        `${SUBMISSION_SERVICE_URL}/api/v1/submissions`,
         {
           code,
           language,
           userID: user.uid,
-          problemID: "671667d4cff1fd44f2b4e512",
+          problemID,
         }
       );
       console.log(response);

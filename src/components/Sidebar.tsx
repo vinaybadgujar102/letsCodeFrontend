@@ -7,7 +7,7 @@ const Sidebar = () => {
   const { id: currentProblemId } = useParams();
 
   return (
-    <div className="drawer">
+    <div className="drawer" style={{ zIndex: 50 }}>
       <input id="my-drawer" type="checkbox" className="drawer-toggle" />
       <div className="drawer-side">
         <label

@@ -1,6 +1,8 @@
-import { createContext, useContext, useEffect, useState } from "react";
-import { auth } from "../config/firebase";
 import { User } from "firebase/auth";
+import { createContext, useContext, useEffect, useState } from "react";
+
+import { auth } from "../config/firebase";
+import { disconnectSocket } from "../services/socket.service";
 
 interface AuthContextType {
   user: User | null;
@@ -18,11 +20,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
+      if (!user) {
+        disconnectSocket();
+      }
       setUser(user);
       setLoading(false);
     });
 
-    return unsubscribe;
+    return () => {
+      unsubscribe();
+      disconnectSocket();
+    };
   }, []);
 
   return (
