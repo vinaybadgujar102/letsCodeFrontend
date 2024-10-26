@@ -16,6 +16,7 @@ function App() {
   const [problem, setProblem] = useState<any>(null);
   const socket = useSocketConnection();
   const [fooEvents, setFooEvents] = useState<any>([]);
+  console.log(fooEvents);
 
   useEffect(() => {
     if (id) {
