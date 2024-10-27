@@ -42,7 +42,7 @@ function App() {
 
   return (
     <>
-      <Navbar />
+      <Navbar page="app" />
       <Description
         descriptionText={problem.description}
         testCases={problem.testCases}

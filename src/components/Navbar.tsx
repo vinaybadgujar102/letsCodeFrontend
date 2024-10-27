@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { auth } from "../config/firebase";
 import { useAuth } from "../context/AuthContext";
 
-const Navbar = () => {
+const Navbar = ({ page }: { page: string }) => {
   const { user } = useAuth();
 
   const handleLogout = async () => {
@@ -18,26 +18,28 @@ const Navbar = () => {
   return (
     <div className="navbar bg-base-100 border-b-2">
       <div className="navbar-start">
-        <div className="dropdown">
-          <label htmlFor="my-drawer">
-            <div role="button" className="btn btn-ghost btn-circle">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M4 6h16M4 12h16M4 18h7"
-                />
-              </svg>
-            </div>
-          </label>
-        </div>
+        {page !== "problems" && (
+          <div className="dropdown">
+            <label htmlFor="my-drawer">
+              <div role="button" className="btn btn-ghost btn-circle">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M4 6h16M4 12h16M4 18h7"
+                  />
+                </svg>
+              </div>
+            </label>
+          </div>
+        )}
       </div>
       <div className="navbar-center">
         <Link to="/" className="btn btn-ghost normal-case text-xl">
