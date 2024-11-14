@@ -1,6 +1,5 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
-
-import axios from "../config/axios.config";
 
 interface Problem {
   _id: string;
@@ -15,7 +14,9 @@ const useFetchProblems = () => {
   useEffect(() => {
     const fetchProblems = async () => {
       try {
-        const response = await axios.get("/api/v1/problems");
+        const response = await axios.get(
+          `${import.meta.env.VITE_PROBLEM_ADMIN_BASE_URL}/api/v1/problems`
+        );
         setProblems(response.data.data);
       } catch (error) {
         console.error("Error fetching problems:", error);

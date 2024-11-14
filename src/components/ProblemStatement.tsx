@@ -1,16 +1,26 @@
 import Markdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 
+import Submissions from "./Submissions";
+
 interface ProblemStatementProps {
   activeTab: string;
   setActiveTab: (tab: string) => void;
   sanitizedMarkdown: string;
+  submissions: {
+    _id: string;
+    status: string;
+    language: string;
+    timestamp: string;
+    executionTime: number;
+  }[];
 }
 
 function ProblemStatement({
   activeTab,
   setActiveTab,
   sanitizedMarkdown,
+  submissions,
 }: ProblemStatementProps) {
   const isActiveTab = (tabName: string) => {
     if (activeTab === tabName) {
@@ -41,17 +51,24 @@ function ProblemStatement({
           className={isActiveTab("submissions")}
           onClick={() => setActiveTab("submissions")}
         >
-          Submission
+          Submissions
         </a>
       </div>
 
-      <div className="markdownViewer p-[20px] basis-1/2">
-        <Markdown
-          rehypePlugins={[rehypeRaw]}
-          className="prose prose-stone max-w-none prose-headings:text-white prose-strong:text-white text-white !important"
-        >
-          {sanitizedMarkdown}
-        </Markdown>
+      <div className="content-container p-[20px]">
+        {activeTab === "statement" && (
+          <div className="markdownViewer">
+            <Markdown
+              rehypePlugins={[rehypeRaw]}
+              className="prose prose-stone max-w-none prose-headings:text-white prose-strong:text-white text-white !important"
+            >
+              {sanitizedMarkdown}
+            </Markdown>
+          </div>
+        )}
+        {activeTab === "submissions" && (
+          <Submissions submissions={submissions} />
+        )}
       </div>
     </>
   );
