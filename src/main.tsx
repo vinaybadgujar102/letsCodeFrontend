@@ -5,12 +5,12 @@ import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 
 import App from "./App.tsx";
-import AddProblem from "./pages/AddProblem.tsx";
-import ProblemList from "./pages/ProblemList.tsx";
-import LandingPage from "./pages/LandingPage.tsx";
-import { AuthProvider } from "./context/AuthContext.tsx";
 import Login from "./components/Auth/Login.tsx";
 import ProtectedRoute from "./components/ProtectedRoute.tsx";
+import { AuthProvider } from "./context/AuthContext.tsx";
+import AddProblem from "./pages/AddProblem.tsx";
+import LandingPage from "./pages/LandingPage.tsx";
+import ProblemList from "./pages/ProblemList.tsx";
 
 const router = createBrowserRouter([
   {
