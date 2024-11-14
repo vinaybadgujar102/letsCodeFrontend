@@ -40,6 +40,7 @@ import {
 } from "../../services/firebase";
 import { toast } from "react-toastify";
 import SubmissionLimit from "../../components/SubmissionLimit";
+import { getUserSubmissions } from "../../apis/problem.api";
 
 interface TestCase {
   input: string;
@@ -59,6 +60,14 @@ interface DescriptionProps {
 
 const SUBMISSION_SERVICE_URL = import.meta.env.VITE_SUBMISSION_SERVICE_URL;
 
+interface Submission {
+  _id: string;
+  status: string;
+  language: string;
+  timestamp: string;
+  executionTime: number;
+}
+
 function Description({
   descriptionText,
   testCases,
@@ -77,6 +86,14 @@ function Description({
     status: string;
   } | null>(null);
   const { user } = useAuth();
+  const [submissions, setSubmissions] = useState<Submission[]>([]);
+  const [isUserLoading, setIsUserLoading] = useState(true);
+
+  useEffect(() => {
+    if (user !== undefined) {
+      setIsUserLoading(false);
+    }
+  }, [user]);
 
   useEffect(() => {
     const handleSubmissionResponse = (data: {
@@ -95,10 +112,6 @@ function Description({
     };
   }, []);
 
-  console.log(responseData);
-
-  console.log(codeStubs);
-
   useEffect(() => {
     const currentStub = codeStubs.find(
       (stub) => stub.language.toLowerCase() === language.toLowerCase()
@@ -108,29 +121,46 @@ function Description({
     }
   }, [language, codeStubs]);
 
-  console.log(code);
+  useEffect(() => {
+    async function fetchSubmissions() {
+      if (isUserLoading) return;
+      if (!user) {
+        return;
+      }
 
-  console.log(codeStubs);
+      try {
+        const problemId = window.location.pathname.split("/")[2];
+
+        const data = await getUserSubmissions(user.uid, problemId);
+        setSubmissions(data.data);
+        console.log(data);
+      } catch (error) {
+        toast.error("Failed to load submissions");
+      }
+    }
+
+    if (activeTab === "submissions") {
+      fetchSubmissions();
+    }
+  }, [user, activeTab, isUserLoading]);
 
   async function handleSubmission() {
     try {
-      if (!user) return;
+      if (!user) {
+        return;
+      }
 
       const canSubmit = await checkAndUpdateSubmissionCount(user.uid);
-      console.log(canSubmit);
 
       if (!canSubmit) {
-        console.log("Submission limit reached");
-
         toast.error(
           `You've reached your daily limit of ${SUBMISSION_LIMIT} submissions`
         );
         return;
       }
 
-      console.log(code);
-      console.log(language);
       const problemID = window.location.href.split("/")[4];
+
       const response = await axios.post(
         `${SUBMISSION_SERVICE_URL}/api/v1/submissions`,
         {
@@ -140,10 +170,9 @@ function Description({
           problemID,
         }
       );
-      console.log(response);
+
       return response;
     } catch (error) {
-      console.log(error);
       toast.error("Something went wrong with your submission");
     }
   }
@@ -183,6 +212,7 @@ function Description({
             activeTab={activeTab}
             setActiveTab={setActiveTab}
             sanitizedMarkdown={sanitizedMarkdown}
+            submissions={submissions}
           />
         </div>
 
