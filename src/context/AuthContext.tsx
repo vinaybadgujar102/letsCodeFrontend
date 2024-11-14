@@ -21,9 +21,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (!user) {
+        localStorage.removeItem("user");
         disconnectSocket();
       }
-      setUser(user);
+      setUser(user ? JSON.parse(localStorage.getItem("user") || "{}") : null);
+
       setLoading(false);
     });
 

@@ -1,6 +1,10 @@
 import { Link } from "react-router-dom";
 
+import { useAuth } from "../context/AuthContext";
+
 export default function LandingPage() {
+  const { user } = useAuth();
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-900 to-gray-800">
       <div className="container mx-auto px-4 py-16">
@@ -14,7 +18,10 @@ export default function LandingPage() {
             challenges.
           </p>
           <div className="flex justify-center gap-6">
-            <Link to="/login" className="btn btn-primary btn-lg">
+            <Link
+              to={user ? "/problems" : "/login"}
+              className="btn btn-primary btn-lg"
+            >
               Get Started
             </Link>
           </div>
