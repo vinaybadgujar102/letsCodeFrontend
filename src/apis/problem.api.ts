@@ -4,7 +4,9 @@ export async function createProblem(
   problemTitle: string,
   problemDescription: string,
   codeStubs: { language: string; startSnippet: string; endSnippet: string }[],
-  testCases: { input: string; output: string }[]
+  testCases: { input: string; output: string }[],
+  difficulty: string,
+  userSnippet: string
 ) {
   try {
     const response = await axios.post("/api/v1/problems", {
@@ -12,6 +14,8 @@ export async function createProblem(
       description: problemDescription,
       codeStubs: codeStubs,
       testCases: testCases,
+      difficulty: difficulty,
+      userSnippet: userSnippet,
     });
     return response;
   } catch (error) {

@@ -46,6 +46,7 @@ function App() {
       <Description
         descriptionText={problem.description}
         testCases={problem.testCases}
+        codeStubs={problem.codeStubs}
       />
       <Sidebar />
     </>

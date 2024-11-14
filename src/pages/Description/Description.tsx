@@ -49,11 +49,21 @@ interface TestCase {
 interface DescriptionProps {
   descriptionText: string;
   testCases: TestCase[];
+  codeStubs: {
+    language: string;
+    startSnippet: string;
+    userSnippet: string;
+    endSnippet: string;
+  }[];
 }
 
 const SUBMISSION_SERVICE_URL = import.meta.env.VITE_SUBMISSION_SERVICE_URL;
 
-function Description({ descriptionText, testCases }: DescriptionProps) {
+function Description({
+  descriptionText,
+  testCases,
+  codeStubs,
+}: DescriptionProps) {
   const sanitizedMarkdown = DOMPurify.sanitize(descriptionText);
   const [activeTab, setActiveTab] = useState("statement");
   const [testCaseTab, setTestCaseTab] = useState("testCase");
@@ -86,6 +96,21 @@ function Description({ descriptionText, testCases }: DescriptionProps) {
   }, []);
 
   console.log(responseData);
+
+  console.log(codeStubs);
+
+  useEffect(() => {
+    const currentStub = codeStubs.find(
+      (stub) => stub.language.toLowerCase() === language.toLowerCase()
+    );
+    if (currentStub) {
+      setCode(currentStub.userSnippet);
+    }
+  }, [language, codeStubs]);
+
+  console.log(code);
+
+  console.log(codeStubs);
 
   async function handleSubmission() {
     try {

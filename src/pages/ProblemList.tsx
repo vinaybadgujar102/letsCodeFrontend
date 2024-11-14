@@ -1,8 +1,8 @@
 import React, { useState } from "react";
+
 import Navbar from "../components/Navbar";
 import ProblemCard from "../components/ProblemCard";
 import useFetchProblems from "../hooks/useFetchProblems";
-
 const ProblemList: React.FC = () => {
   const { problems, error } = useFetchProblems();
   const [selectedDifficulty, setSelectedDifficulty] = useState<string>("all");

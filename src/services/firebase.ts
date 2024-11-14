@@ -11,7 +11,7 @@ import { auth } from "../config/firebase";
 
 const db = getFirestore();
 
-export const SUBMISSION_LIMIT = 10;
+export const SUBMISSION_LIMIT = 50;
 
 export async function checkAndUpdateSubmissionCount(
   userId: string

@@ -53,7 +53,13 @@ const TestCases: React.FC<TestCasesProps> = ({ testCases, setTestCases }) => {
           ></textarea>
         </div>
       </div>
-      <button className="btn btn-primary mb-4" onClick={addTestCase}>
+      <button
+        className="btn btn-primary mb-4"
+        onClick={(e) => {
+          e.preventDefault();
+          addTestCase();
+        }}
+      >
         Add Test Case
       </button>
       <div>
@@ -70,7 +76,10 @@ const TestCases: React.FC<TestCasesProps> = ({ testCases, setTestCases }) => {
             </p>
             <button
               className="btn btn-sm btn-error mt-2"
-              onClick={() => removeTestCase(index)}
+              onClick={(e) => {
+                e.preventDefault();
+                removeTestCase(index);
+              }}
             >
               Remove
             </button>

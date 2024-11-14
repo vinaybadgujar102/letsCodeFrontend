@@ -72,7 +72,13 @@ const CodeStubEditor: React.FC<CodeStubEditorProps> = ({
             </option>
           ))}
         </select>
-        <button className="btn btn-primary" onClick={addOrUpdateCodeStub}>
+        <button
+          className="btn btn-primary"
+          onClick={(e) => {
+            e.preventDefault();
+            addOrUpdateCodeStub();
+          }}
+        >
           Add/Update Stub
         </button>
       </div>
