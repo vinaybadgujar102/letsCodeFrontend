@@ -9,10 +9,13 @@ interface ProblemStatementProps {
   sanitizedMarkdown: string;
   submissions: {
     _id: string;
+    userId: string;
+    problemId: string;
+    code: string;
     status: string;
     language: string;
-    timestamp: string;
     executionTime: number;
+    updatedAt: string;
   }[];
 }
 

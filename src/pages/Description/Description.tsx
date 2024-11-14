@@ -62,10 +62,13 @@ const SUBMISSION_SERVICE_URL = import.meta.env.VITE_SUBMISSION_SERVICE_URL;
 
 interface Submission {
   _id: string;
+  userId: string;
+  problemId: string;
+  code: string;
   status: string;
   language: string;
-  timestamp: string;
   executionTime: number;
+  updatedAt: string;
 }
 
 function Description({
