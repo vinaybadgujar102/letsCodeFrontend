@@ -16,7 +16,7 @@ const ProblemList: React.FC = () => {
 
   return (
     <div className="flex flex-col w-screen h-screen">
-      <Navbar page="problems" />
+      <Navbar />
       <div className="leftPanel h-full overflow-auto w-full">
         <div className="container mx-auto px-4 py-8">
           <h1 className="text-4xl font-bold text-gray mb-8">
