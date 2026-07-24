@@ -12,6 +12,7 @@ import Languages from "../constant/Languages";
 interface CodeStub {
   language: string;
   startSnippet: string;
+  userSnippet: string;
   endSnippet: string;
 }
 
@@ -26,32 +27,34 @@ const CodeStubEditor: React.FC<CodeStubEditorProps> = ({
 }) => {
   const [selectedLanguage, setSelectedLanguage] = useState(Languages[0].value);
   const [currentStartSnippet, setCurrentStartSnippet] = useState("");
+  const [currentUserSnippet, setCurrentUserSnippet] = useState("");
   const [currentEndSnippet, setCurrentEndSnippet] = useState("");
+
+  const getBackendLanguage = (aceValue: string) => {
+    const lang = Languages.find((l) => l.value === aceValue);
+    return lang?.backendLanguage ?? aceValue.toUpperCase();
+  };
 
   const handleLanguageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedLanguage(e.target.value);
+    const backendLang = getBackendLanguage(e.target.value);
     const existingStub = codeStubs.find(
-      (stub) => stub.language === e.target.value
+      (stub) => stub.language === backendLang
     );
     setCurrentStartSnippet(existingStub ? existingStub.startSnippet : "");
+    setCurrentUserSnippet(existingStub ? existingStub.userSnippet : "");
     setCurrentEndSnippet(existingStub ? existingStub.endSnippet : "");
   };
 
-  const handleStartSnippetChange = (newCode: string) => {
-    setCurrentStartSnippet(newCode);
-  };
-
-  const handleEndSnippetChange = (newCode: string) => {
-    setCurrentEndSnippet(newCode);
-  };
-
   const addOrUpdateCodeStub = () => {
+    const backendLang = getBackendLanguage(selectedLanguage);
     const updatedStubs = codeStubs.filter(
-      (stub) => stub.language !== selectedLanguage
+      (stub) => stub.language !== backendLang
     );
     updatedStubs.push({
-      language: selectedLanguage,
+      language: backendLang,
       startSnippet: currentStartSnippet,
+      userSnippet: currentUserSnippet,
       endSnippet: currentEndSnippet,
     });
     setCodeStubs(updatedStubs);
@@ -87,10 +90,23 @@ const CodeStubEditor: React.FC<CodeStubEditorProps> = ({
         <AceEditor
           mode={selectedLanguage}
           theme="monokai"
-          onChange={handleStartSnippetChange}
+          onChange={setCurrentStartSnippet}
           name="start-snippet-editor"
           editorProps={{ $blockScrolling: true }}
           value={currentStartSnippet}
+          width="100%"
+          height="150px"
+        />
+      </div>
+      <div className="mb-4">
+        <h3 className="text-lg font-semibold mb-2">User Snippet (Editable)</h3>
+        <AceEditor
+          mode={selectedLanguage}
+          theme="monokai"
+          onChange={setCurrentUserSnippet}
+          name="user-snippet-editor"
+          editorProps={{ $blockScrolling: true }}
+          value={currentUserSnippet}
           width="100%"
           height="150px"
         />
@@ -100,7 +116,7 @@ const CodeStubEditor: React.FC<CodeStubEditorProps> = ({
         <AceEditor
           mode={selectedLanguage}
           theme="monokai"
-          onChange={handleEndSnippetChange}
+          onChange={setCurrentEndSnippet}
           name="end-snippet-editor"
           editorProps={{ $blockScrolling: true }}
           value={currentEndSnippet}

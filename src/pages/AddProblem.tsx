@@ -19,7 +19,6 @@ export default function AddProblem() {
   const [codeStubs, setCodeStubs] = useState<any>([]);
   const [testCases, setTestCases] = useState<TestCase[]>([]);
   const [difficulty, setDifficulty] = useState("easy");
-  const [userSnippet, setUserSnippet] = useState("");
 
   async function onFormSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -29,8 +28,7 @@ export default function AddProblem() {
         markdown,
         codeStubs,
         testCases,
-        difficulty,
-        userSnippet
+        difficulty
       );
       console.log(response);
       setTitle("");
@@ -38,7 +36,6 @@ export default function AddProblem() {
       setCodeStubs([]);
       setTestCases([]);
       setDifficulty("easy");
-      setUserSnippet("");
       toast.info("Successfully created the problem!");
     } catch (error) {
       console.log("Something went wrong");
@@ -89,33 +86,19 @@ export default function AddProblem() {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4 mb-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Difficulty Level
-              </label>
-              <select
-                className="select select-bordered w-full"
-                value={difficulty}
-                onChange={(e) => setDifficulty(e.target.value)}
-              >
-                <option value="easy">Easy</option>
-                <option value="medium">Medium</option>
-                <option value="hard">Hard</option>
-              </select>
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">
-                User Snippet (Default Code)
-              </label>
-              <textarea
-                className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-                rows={3}
-                value={userSnippet}
-                onChange={(e) => setUserSnippet(e.target.value)}
-                placeholder="Enter the default code that will be shown to users"
-              ></textarea>
-            </div>
+          <div className="mb-4">
+            <label className="block text-sm font-medium text-gray-700">
+              Difficulty Level
+            </label>
+            <select
+              className="select select-bordered w-full"
+              value={difficulty}
+              onChange={(e) => setDifficulty(e.target.value)}
+            >
+              <option value="easy">Easy</option>
+              <option value="medium">Medium</option>
+              <option value="hard">Hard</option>
+            </select>
           </div>
 
           <CodeStubEditor codeStubs={codeStubs} setCodeStubs={setCodeStubs} />

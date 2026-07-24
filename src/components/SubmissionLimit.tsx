@@ -32,7 +32,7 @@ export default function SubmissionLimit() {
     ((SUBMISSION_LIMIT - remainingSubmissions) / SUBMISSION_LIMIT) * 100;
 
   return (
-    <div className="flex items-center gap-2 bg-gray-800 p-3 rounded-lg shadow-md relative z-50">
+    <div className="flex items-center gap-2 bg-gray-800 p-3 rounded-lg shadow-md relative z-10 shrink-0">
       <div className="flex-1">
         <div className="flex items-center gap-2 mb-1">
           <span className="text-gray-300 font-medium">Daily Submissions</span>

@@ -3,6 +3,26 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --lc-background: #f9f9f9;
+    --lc-surface: #f9f9f9;
+    --lc-surface-variant: #e2e2e2;
+    --lc-surface-container-lowest: #ffffff;
+    --lc-surface-container-low: #f3f3f3;
+    --lc-surface-container: #eeeeee;
+    --lc-surface-container-high: #e8e8e8;
+    --lc-surface-container-highest: #e2e2e2;
+    --lc-primary: #000000;
+    --lc-on-primary: #ffffff;
+    --lc-on-surface: #1b1b1b;
+    --lc-on-surface-variant: #4c4546;
+    --lc-outline: #7e7576;
+    --lc-outline-variant: #cfc4c5;
+    --lc-code-keyword: #7c3aed;
+    --lc-code-comment: #6b7280;
+    --lc-code-fg: #1b1b1b;
+  }
+
   h1 {
     @apply text-4xl;
   }
@@ -13,4 +33,52 @@
   h3 {
     @apply text-2xl;
   }
+}
+
+/* Landing page — Quiet IDE theme */
+.landing {
+  background-color: var(--lc-background);
+  color: var(--lc-on-surface);
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.landing.dark {
+  --lc-background: #0f0f0f;
+  --lc-surface: #0f0f0f;
+  --lc-surface-variant: #2a2a2a;
+  --lc-surface-container-lowest: #161616;
+  --lc-surface-container-low: #1c1c1c;
+  --lc-surface-container: #222222;
+  --lc-surface-container-high: #2a2a2a;
+  --lc-surface-container-highest: #333333;
+  --lc-primary: #f5f5f5;
+  --lc-on-primary: #0f0f0f;
+  --lc-on-surface: #f1f1f1;
+  --lc-on-surface-variant: #a3a3a3;
+  --lc-outline: #8a8a8a;
+  --lc-outline-variant: #3a3a3a;
+  --lc-code-keyword: #c4b5fd;
+  --lc-code-comment: #737373;
+  --lc-code-fg: #e5e5e5;
+}
+
+.landing h1,
+.landing h2,
+.landing h3 {
+  font-size: unset;
+  line-height: unset;
+}
+
+.landing ::-webkit-scrollbar {
+  width: 6px;
+}
+
+.landing ::-webkit-scrollbar-track {
+  background: var(--lc-surface-container-low);
+}
+
+.landing ::-webkit-scrollbar-thumb {
+  background: var(--lc-primary);
+  border-radius: 0;
 }

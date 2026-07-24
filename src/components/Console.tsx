@@ -29,12 +29,15 @@ function Console({
       case "WA":
         return "Wrong Answer";
       case "AC":
+      case "COMPLETED":
+      case "SUCCESS":
         return "Correct";
       case "TLE":
         return "Time Limit Exceeded";
       case "MLE":
         return "Memory Limit Exceeded";
       case "RE":
+      case "ERROR":
         return "Runtime Error";
       default:
         return status;
@@ -45,11 +48,14 @@ function Console({
     switch (status) {
       case "WA":
         return "text-red-500";
+      case "AC":
+      case "COMPLETED":
       case "SUCCESS":
         return "text-green-500";
       case "TLE":
       case "MLE":
       case "RE":
+      case "ERROR":
         return "text-yellow-500";
       default:
         return "text-white";

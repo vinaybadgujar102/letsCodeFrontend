@@ -7,9 +7,9 @@ const Sidebar = () => {
   const { id: currentProblemId } = useParams();
 
   return (
-    <div className="drawer" style={{ zIndex: 50 }}>
+    <div className="drawer">
       <input id="my-drawer" type="checkbox" className="drawer-toggle" />
-      <div className="drawer-side">
+      <div className="drawer-side z-40">
         <label
           htmlFor="my-drawer"
           aria-label="close sidebar"

@@ -1,17 +1,25 @@
-import { format } from "date-fns";
+import { format, isValid, parseISO } from "date-fns";
 import { useState } from "react";
 
 interface Submission {
   _id: string;
   status: string;
   language: string;
-  updatedAt: string;
-  executionTime: number;
+  updatedAt?: string;
+  createdAt?: string;
+  executionTime?: number;
   code: string;
 }
 
 interface SubmissionsProps {
   submissions: Submission[];
+}
+
+function formatSubmissionDate(value?: string) {
+  if (!value) return "—";
+  const date = typeof value === "string" ? parseISO(value) : new Date(value);
+  if (!isValid(date)) return "—";
+  return format(date, "MMM dd, yyyy HH:mm");
 }
 
 export default function Submissions({ submissions }: SubmissionsProps) {
@@ -21,12 +29,16 @@ export default function Submissions({ submissions }: SubmissionsProps) {
   const getStatusColor = (status: string) => {
     switch (status.toUpperCase()) {
       case "ACCEPTED":
+      case "SUCCESS":
         return "text-green-500";
       case "WRONG_ANSWER":
+      case "WA":
         return "text-red-500";
       case "TIME_LIMIT_EXCEEDED":
+      case "TLE":
         return "text-yellow-500";
       case "RUNTIME_ERROR":
+      case "RE":
         return "text-orange-500";
       default:
         return "text-gray-500";
@@ -36,13 +48,19 @@ export default function Submissions({ submissions }: SubmissionsProps) {
   const getStatusText = (status: string) => {
     switch (status.toUpperCase()) {
       case "ACCEPTED":
+      case "SUCCESS":
         return "Accepted";
       case "WRONG_ANSWER":
+      case "WA":
         return "Wrong Answer";
       case "TIME_LIMIT_EXCEEDED":
+      case "TLE":
         return "Time Limit Exceeded";
       case "RUNTIME_ERROR":
+      case "RE":
         return "Runtime Error";
+      case "PENDING":
+        return "Pending";
       default:
         return status;
     }
@@ -55,6 +73,9 @@ export default function Submissions({ submissions }: SubmissionsProps) {
   const closeModal = () => {
     setSelectedSubmission(null);
   };
+
+  const getDisplayDate = (submission: Submission) =>
+    formatSubmissionDate(submission.updatedAt || submission.createdAt);
 
   return (
     <div className="p-4">
@@ -91,13 +112,10 @@ export default function Submissions({ submissions }: SubmissionsProps) {
                   </td>
                   <td className="text-gray-300">{submission.language}</td>
                   <td className="text-gray-300">
-                    {submission.executionTime}ms
+                    {submission.executionTime ?? 0}ms
                   </td>
                   <td className="text-gray-300">
-                    {format(
-                      new Date(submission.updatedAt),
-                      "MMM dd, yyyy HH:mm"
-                    )}
+                    {getDisplayDate(submission)}
                   </td>
                 </tr>
               ))
@@ -106,18 +124,13 @@ export default function Submissions({ submissions }: SubmissionsProps) {
         </table>
       </div>
 
-      {/* Code Preview Modal */}
       {selectedSubmission && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-gray-800 rounded-lg w-3/4 max-h-[80vh] overflow-hidden">
             <div className="p-4 border-b border-gray-700 flex justify-between items-center">
               <div>
                 <span className="text-gray-300 mr-4">
-                  Submission Details -{" "}
-                  {format(
-                    new Date(selectedSubmission.updatedAt),
-                    "MMM dd, yyyy HH:mm"
-                  )}
+                  Submission Details - {getDisplayDate(selectedSubmission)}
                 </span>
                 <span
                   className={`${getStatusColor(

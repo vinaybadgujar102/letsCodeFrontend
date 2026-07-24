@@ -3,10 +3,14 @@ import axios from "axios";
 export async function createProblem(
   problemTitle: string,
   problemDescription: string,
-  codeStubs: { language: string; startSnippet: string; endSnippet: string }[],
+  codeStubs: {
+    language: string;
+    startSnippet: string;
+    userSnippet: string;
+    endSnippet: string;
+  }[],
   testCases: { input: string; output: string }[],
-  difficulty: string,
-  userSnippet: string
+  difficulty: string
 ) {
   try {
     const response = await axios.post(
@@ -17,7 +21,6 @@ export async function createProblem(
         codeStubs: codeStubs,
         testCases: testCases,
         difficulty: difficulty,
-        userSnippet: userSnippet,
       }
     );
     return response;

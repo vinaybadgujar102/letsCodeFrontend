@@ -41,6 +41,8 @@ import {
 import { toast } from "react-toastify";
 import SubmissionLimit from "../../components/SubmissionLimit";
 import { getUserSubmissions } from "../../apis/problem.api";
+import { toBackendLanguage } from "../../constant/Languages";
+import { SubmissionPhase } from "../../components/SubmissionStatus";
 
 interface TestCase {
   input: string;
@@ -91,6 +93,8 @@ function Description({
   const { user } = useAuth();
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const [isUserLoading, setIsUserLoading] = useState(true);
+  const [submissionPhase, setSubmissionPhase] =
+    useState<SubmissionPhase>("idle");
 
   useEffect(() => {
     if (user !== undefined) {
@@ -106,6 +110,24 @@ function Description({
       };
     }) => {
       setResponseData(data.response);
+      setTestCaseTab("result");
+      setSubmissionPhase(
+        ["WA", "RE", "ERROR", "TLE", "MLE"].includes(
+          (data.response.status || "").toUpperCase()
+        )
+          ? "failed"
+          : "completed"
+      );
+
+      // Refresh submissions list so status moves off Pending
+      if (user) {
+        const problemId = window.location.pathname.split("/")[2];
+        getUserSubmissions(user.uid, problemId)
+          .then((result) => setSubmissions(result.data))
+          .catch(() => {
+            /* ignore refresh errors */
+          });
+      }
     };
 
     socket.on("submissionPayloadResponse", handleSubmissionResponse);
@@ -113,11 +135,11 @@ function Description({
     return () => {
       socket.off("submissionPayloadResponse", handleSubmissionResponse);
     };
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     const currentStub = codeStubs.find(
-      (stub) => stub.language.toLowerCase() === language.toLowerCase()
+      (stub) => toBackendLanguage(stub.language) === toBackendLanguage(language)
     );
     if (currentStub) {
       setCode(currentStub.userSnippet);
@@ -148,8 +170,28 @@ function Description({
   }, [user, activeTab, isUserLoading]);
 
   async function handleSubmission() {
+    console.log("handleSubmission clicked", {
+      hasUser: !!user,
+      SUBMISSION_SERVICE_URL,
+      language,
+    });
+
     try {
       if (!user) {
+        toast.error("Please log in to submit code");
+        return;
+      }
+
+      if (!SUBMISSION_SERVICE_URL) {
+        toast.error("Submission service URL is not configured");
+        return;
+      }
+
+      if (
+        submissionPhase === "submitting" ||
+        submissionPhase === "queued" ||
+        submissionPhase === "evaluating"
+      ) {
         return;
       }
 
@@ -162,7 +204,15 @@ function Description({
         return;
       }
 
-      const problemID = window.location.href.split("/")[4];
+      const problemID = window.location.pathname.split("/")[2];
+      if (!problemID) {
+        toast.error("Could not determine problem id");
+        return;
+      }
+
+      setTestCaseTab("result");
+      setResponseData(null);
+      setSubmissionPhase("evaluating");
 
       const response = await axios.post(
         `${SUBMISSION_SERVICE_URL}/api/v1/submissions`,
@@ -174,8 +224,11 @@ function Description({
         }
       );
 
+      console.log("Submission API response:", response.data);
       return response;
     } catch (error) {
+      console.error("Submission failed:", error);
+      setSubmissionPhase("failed");
       toast.error("Something went wrong with your submission");
     }
   }
@@ -225,7 +278,7 @@ function Description({
         ></div>
 
         <div
-          className="rightPanel h-full overflow-auto flex flex-col"
+          className="rightPanel h-full overflow-hidden flex flex-col min-h-0"
           style={{ width: `${100 - leftWidth}%` }}
         >
           <CodeEditor
@@ -236,6 +289,8 @@ function Description({
             code={code}
             setCode={setCode}
             handleSubmission={handleSubmission}
+            submissionPhase={submissionPhase}
+            resultStatus={responseData?.status}
           />
           <Console
             testCaseTab={testCaseTab}
