@@ -1,30 +1,86 @@
-# React + TypeScript + Vite
+# LetsCode Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Web client for **LetsCode** — a LeetCode-style coding practice platform. Browse problems, write code in the browser, submit solutions, and get real-time evaluation results.
 
-Currently, two official plugins are available:
+**Live demo:** [letscode.vinaybadgujar.online](https://letscode.vinaybadgujar.online)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Features
 
-## Expanding the ESLint configuration
+- Problem list and problem detail pages
+- In-browser code editor (Ace) with Python, Java, and C++ stubs
+- Firebase Google authentication
+- Code submission with live Socket.IO results
+- Admin flow to add new problems
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Tech stack
 
-- Configure the top-level `parserOptions` property like this:
+- React 18 + TypeScript
+- Vite
+- Tailwind CSS + DaisyUI
+- Firebase Auth
+- Socket.IO client
+- React Router
+- Axios
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
+## Getting started
+
+### Prerequisites
+
+- Node.js 18+
+- Running [LetsCode backend](https://github.com/vinaybadgujar102/LetsCodeBackend) services
+- Firebase project (Auth enabled)
+
+### Setup
+
+```bash
+git clone https://github.com/vinaybadgujar102/letsCodeFrontend.git
+cd letsCodeFrontend
+npm install
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+Create a `.env` file:
+
+```env
+VITE_PROBLEM_ADMIN_BASE_URL=http://localhost:3000
+VITE_SUBMISSION_SERVICE_URL=http://localhost:3001
+VITE_SOCKET_SERVICE_URL=http://localhost:3003
+
+VITE_FIREBASE_API_KEY=
+VITE_FIREBASE_AUTH_DOMAIN=
+VITE_FIREBASE_PROJECT_ID=
+VITE_FIREBASE_STORAGE_BUCKET=
+VITE_FIREBASE_MESSAGING_SENDER_ID=
+VITE_FIREBASE_APP_ID=
+```
+
+### Run
+
+```bash
+npm run dev
+```
+
+App runs at `http://localhost:5173`.
+
+### Build
+
+```bash
+npm run build
+npm run preview
+```
+
+## Project structure
+
+```
+src/
+├── apis/           # REST API clients
+├── components/     # UI components (editor, navbar, etc.)
+├── config/         # Firebase config
+├── context/        # Auth context
+├── hooks/          # Custom hooks
+├── pages/          # Route pages
+└── services/       # Socket + Firebase helpers
+```
+
+## Related
+
+- Backend: [LetsCodeBackend](https://github.com/vinaybadgujar102/LetsCodeBackend)
