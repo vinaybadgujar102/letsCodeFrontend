@@ -1,5 +1,10 @@
 import axios from "axios";
 
+import {
+  PROBLEM_ADMIN_BASE_URL,
+  SUBMISSION_SERVICE_URL,
+} from "../config/api";
+
 export async function createProblem(
   problemTitle: string,
   problemDescription: string,
@@ -14,7 +19,7 @@ export async function createProblem(
 ) {
   try {
     const response = await axios.post(
-      `${import.meta.env.VITE_PROBLEM_ADMIN_BASE_URL}/api/v1/problems`,
+      `${PROBLEM_ADMIN_BASE_URL}/api/v1/problems`,
       {
         title: problemTitle,
         description: problemDescription,
@@ -32,9 +37,7 @@ export async function createProblem(
 
 export async function getProblem(problemId: string) {
   const response = await axios.get(
-    `${
-      import.meta.env.VITE_PROBLEM_ADMIN_BASE_URL
-    }/api/v1/problems/${problemId}`
+    `${PROBLEM_ADMIN_BASE_URL}/api/v1/problems/${problemId}`
   );
   return response;
 }
@@ -42,9 +45,7 @@ export async function getProblem(problemId: string) {
 export async function getUserSubmissions(userId: string, problemId: string) {
   try {
     const response = await axios.get(
-      `${
-        import.meta.env.VITE_SUBMISSION_SERVICE_URL
-      }/api/v1/submissions/user/${userId}/problem/${problemId}`
+      `${SUBMISSION_SERVICE_URL}/api/v1/submissions/user/${userId}/problem/${problemId}`
     );
     return response.data;
   } catch (error) {

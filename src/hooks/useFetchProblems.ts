@@ -1,6 +1,8 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 
+import { PROBLEM_ADMIN_BASE_URL } from "../config/api";
+
 interface Problem {
   _id: string;
   title: string;
@@ -15,7 +17,7 @@ const useFetchProblems = () => {
     const fetchProblems = async () => {
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_PROBLEM_ADMIN_BASE_URL}/api/v1/problems`
+          `${PROBLEM_ADMIN_BASE_URL}/api/v1/problems`
         );
         setProblems(response.data.data);
       } catch (error) {

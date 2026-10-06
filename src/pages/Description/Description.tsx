@@ -29,6 +29,7 @@ import "ace-builds/src-noconflict/theme-terminal";
 import "ace-builds/src-noconflict/ext-language_tools";
 
 import axios from "axios";
+import { SUBMISSION_SERVICE_URL } from "../../config/api";
 import { socket } from "../../socket"; // Ensure you have the correct path to your socket instance
 import ProblemStatement from "../../components/ProblemStatement";
 import CodeEditor from "../../components/CodeEditor";
@@ -59,8 +60,6 @@ interface DescriptionProps {
     endSnippet: string;
   }[];
 }
-
-const SUBMISSION_SERVICE_URL = import.meta.env.VITE_SUBMISSION_SERVICE_URL;
 
 interface Submission {
   _id: string;
